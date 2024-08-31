@@ -30,13 +30,15 @@
                 <textarea id="description" name="description" required></textarea>
             </div>
 
-            <fieldset class="form-group">
-                <legend>Alert Choices</legend>
-                <label><input type="checkbox" name="alerts" value="1 day before"> One day before</label>
-                <label><input type="checkbox" name="alerts" value="1 hour before"> One hour before</label>
-                <label><input type="checkbox" name="alerts" value="5 minutes before"> 5 minutes before</label>
-                <label><input type="checkbox" name="alerts" value="10 minutes before"> 10 minutes before</label>
-            </fieldset>
+            <div class="form-group">
+                <label for="date">Date of Reminder</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="time">Time of Reminder</label>
+                <input type="time" id="time" name="time" required>
+            </div>
 
             <button type="submit">Create Reminder</button>
         </form>

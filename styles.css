@@ -32,6 +32,8 @@ label {
 
 input[type="text"],
 input[type="email"],
+input[type="date"],
+input[type="time"],
 textarea {
     width: 100%;
     padding: 10px;
@@ -43,16 +45,6 @@ textarea {
 textarea {
     height: 100px;
     resize: vertical;
-}
-
-fieldset {
-    border: none;
-    padding: 0;
-}
-
-legend {
-    font-weight: bold;
-    margin-bottom: 10px;
 }
 
 button {
