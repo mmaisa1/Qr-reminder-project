@@ -1,0 +1,1 @@
+Enabled 2fa, set app password and tested code on mobile network
