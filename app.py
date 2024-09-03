@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 from flask_mail import Mail, Message
 from datetime import datetime
 import threading
 import time
+import qrcode
+import io
 
 app = Flask(__name__)
 app.secret_key = '1989f15fb5f5df6ae5ffb51a3b5157f2'  # Replace with your generated secret key
@@ -58,5 +60,26 @@ def create_reminder():
 
     return redirect(url_for('index'))
 
+# Route to generate the QR code
+@app.route('/qr-code')
+def generate_qr():
+    # URL of the form (local link for now)
+    url = 'http://192.168.86.221:5000/'
+
+    # Generate the QR code
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(url)
+    qr.make(fit=True)
+
+    # Create an image from the QR code
+    img = qr.make_image(fill='black', back_color='white')
+
+    # Save the image in a BytesIO object to send it as a file
+    img_io = io.BytesIO()
+    img.save(img_io, 'PNG')
+    img_io.seek(0)
+
+    return send_file(img_io, mimetype='image/png')
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
