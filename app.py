@@ -33,7 +33,11 @@ def send_email(subject, body, recipient, send_time):
         print(f"Error sending email: {e}")
 
 @app.route('/')
-def index():
+def qr_code_page():
+    return render_template('qrcode.html')
+
+@app.route('/secret-form')
+def secret_form():
     return render_template('index.html')
 
 @app.route('/create-reminder', methods=['POST'])
@@ -58,13 +62,14 @@ def create_reminder():
     except Exception as e:
         flash(f'Error: {e}', 'error')
 
-    return redirect(url_for('index'))
+    # Redirect back to the secret form after setting a reminder
+    return redirect(url_for('secret_form'))
 
 # Route to generate the QR code
 @app.route('/qr-code')
 def generate_qr():
-    # URL of the form (local link for now)
-    url = 'http://192.168.86.221:5000/'
+    # URL of the form
+    url = 'http://192.168.86.221:5000/secret-form'
 
     # Generate the QR code
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
@@ -72,11 +77,28 @@ def generate_qr():
     qr.make(fit=True)
 
     # Create an image from the QR code
-    img = qr.make_image(fill='black', back_color='white')
+    img = qr.make_image(fill='black', back_color='white').convert('RGB')
+    # Create a new image with curved corners
+    img = img.resize((300, 300))
+    img_with_corners = img.copy()
+    corner_radius = 30
 
-    # Save the image in a BytesIO object to send it as a file
+    # Draw the curved corners
+    for x in range(img.size[0]):
+        for y in range(img.size[1]):
+            if (
+                x < corner_radius and y < corner_radius
+            ) or (
+                x < corner_radius and y >= img.size[1] - corner_radius
+            ) or (
+                x >= img.size[0] - corner_radius and y < corner_radius
+            ) or (
+                x >= img.size[0] - corner_radius and y >= img.size[1] - corner_radius
+            ):
+                img_with_corners.putpixel((x, y), (255, 255, 255))
+
     img_io = io.BytesIO()
-    img.save(img_io, 'PNG')
+    img_with_corners.save(img_io, 'PNG')
     img_io.seek(0)
 
     return send_file(img_io, mimetype='image/png')

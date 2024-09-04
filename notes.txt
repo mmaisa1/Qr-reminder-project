@@ -1,3 +1,4 @@
 August 31st 2024 : Enabled 2fa, set app password and tested code on mobile network.
 Sep 3 2024: updated app url to local ip. ensure both system and mobile connected to same network.
+	    - check why code was trying to access commented url "<!--a href="{{ url_for('index') }}" class="back-button">Back to Form</a-->"
 
