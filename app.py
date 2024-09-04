@@ -19,18 +19,31 @@ app.config['MAIL_USE_SSL'] = False
 
 mail = Mail(app)
 
-def send_email(subject, body, recipient, send_time):
+def send_email(subject, body, recipient, username, title, send_time):
     time_diff = (send_time - datetime.now()).total_seconds()
     if time_diff > 0:
         time.sleep(time_diff)
 
+    # Format the email body
+    formatted_body = f"""
+Hi {username},
+
+This email is a friendly reminder about {title}.
+
+{body}
+
+Regards,
+Team
+    """
+
     msg = Message(subject, sender=app.config['MAIL_USERNAME'], recipients=[recipient])
-    msg.body = body
+    msg.body = formatted_body
     try:
         with app.app_context():
             mail.send(msg)
     except Exception as e:
         print(f"Error sending email: {e}")
+
 
 @app.route('/')
 def qr_code_page():
@@ -54,7 +67,10 @@ def create_reminder():
         reminder_datetime = datetime.strptime(f"{reminder_date} {reminder_time}", '%Y-%m-%d %H:%M')
 
         # Send email at the specified time using a separate thread
-        threading.Thread(target=send_email, args=(title, description, email, reminder_datetime)).start()
+        threading.Thread(
+            target=send_email, 
+            args=(title, description, email, username, title, reminder_datetime)
+        ).start()
 
         flash('Reminder set successfully!', 'success')
     except ValueError as ve:
@@ -62,7 +78,6 @@ def create_reminder():
     except Exception as e:
         flash(f'Error: {e}', 'error')
 
-    # Redirect back to the secret form after setting a reminder
     return redirect(url_for('secret_form'))
 
 # Route to generate the QR code
