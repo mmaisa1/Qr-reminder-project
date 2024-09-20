@@ -9,4 +9,6 @@ Sep 03 2024:	USE CASE 1 implemented successfully:
 		- updated app url to local ip. ensure both system and mobile connected to same network.
 	        - check why code was trying to access commented url "<!--a href="{{ url_for('index') }}" class="back-button">Back to Form</a-->"
 
+UpNext: Logging/debugging. database setup and management, data querying and report generation, Automation.
+
 

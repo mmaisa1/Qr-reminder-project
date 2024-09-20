@@ -5,8 +5,28 @@ import threading
 import time
 import qrcode
 import io
+import logging
+from logging.handlers import RotatingFileHandler
 
+# Configure logging
+log_handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
+log_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+log_handler.setFormatter(formatter)
+
+# Add the file handler to the app's logger
 app = Flask(__name__)
+app.logger.addHandler(log_handler)
+
+#9-20-24:1 Add a console handler to ensure logging shows up in the console as well
+'''console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+console_handler.setFormatter(formatter)
+app.logger.addHandler(console_handler)'''
+
+#9-20-24:1  Set the logger's level explicitly to capture all messages
+app.logger.setLevel(logging.INFO)
+
 app.secret_key = '1989f15fb5f5df6ae5ffb51a3b5157f2'  # Replace with your generated secret key
 
 # Configuration for Flask-Mail
@@ -41,16 +61,19 @@ Team
     try:
         with app.app_context():
             mail.send(msg)
+            app.logger.info(f"Email sent to {recipient} at '{send_time}'")
     except Exception as e:
-        print(f"Error sending email: {e}")
+        app.logger.error(f"Error sending email: {e}")
 
 
 @app.route('/')
 def qr_code_page():
+    app.logger.info('Rendering QR code page')
     return render_template('qrcode.html')
 
 @app.route('/secret-form')
 def secret_form():
+    app.logger.info('Rendering secret form page')
     return render_template('index.html')
 
 @app.route('/create-reminder', methods=['POST'])
@@ -73,10 +96,13 @@ def create_reminder():
         ).start()
 
         flash('Reminder set successfully!', 'success')
+        app.logger.info(f"Reminder set for {username} ({email}) at '{reminder_datetime}'")
     except ValueError as ve:
         flash(f'Error: {ve}', 'error')
+        app.logger.error(f'ValueError: {ve}')
     except Exception as e:
         flash(f'Error: {e}', 'error')
+        app.logger.error(f'Exception: {e}')
 
     return redirect(url_for('secret_form'))
 
@@ -84,7 +110,7 @@ def create_reminder():
 @app.route('/qr-code')
 def generate_qr():
     # URL of the form
-    url = 'http://192.168.86.221:5000/secret-form'
+    url = 'http://172.20.10.7:5000/secret-form'
 
     # Generate the QR code
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
@@ -116,6 +142,7 @@ def generate_qr():
     img_with_corners.save(img_io, 'PNG')
     img_io.seek(0)
 
+    app.logger.info('Generated QR code')
     return send_file(img_io, mimetype='image/png')
 
 if __name__ == '__main__':
