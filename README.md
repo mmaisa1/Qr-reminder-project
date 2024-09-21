@@ -1,5 +1,3 @@
-Of course! Here’s a suggested structure and content for your README file:
-
 # QR Reminder Project
 
 ## Overview
