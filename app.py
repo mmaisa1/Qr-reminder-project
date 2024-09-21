@@ -114,7 +114,7 @@ def create_reminder():
 @app.route('/qr-code')
 def generate_qr():
     # URL of the form
-    url = 'http://172.20.10.7:5000/secret-form'
+    url = os.getenv('URL')
 
     # Generate the QR code
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
