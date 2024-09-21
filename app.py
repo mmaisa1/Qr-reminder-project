@@ -50,7 +50,7 @@ def send_email(subject, body, recipient, username, title, send_time):
 
     # Format the email body
     formatted_body = f"""
-Hi {username},
+Hello {username},
 
 This email is a friendly reminder about {title}.
 
