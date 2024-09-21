@@ -1,0 +1,4 @@
+Flask
+Flask-Mail
+qrcode[pil]
+python-dotenv
