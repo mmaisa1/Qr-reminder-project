@@ -7,6 +7,8 @@ import qrcode
 import io
 import logging
 from logging.handlers import RotatingFileHandler
+from dotenv import load_dotenv
+import os
 
 # Configure logging
 log_handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
@@ -27,13 +29,15 @@ app.logger.addHandler(console_handler)'''
 #9-20-24:1  Set the logger's level explicitly to capture all messages
 app.logger.setLevel(logging.INFO)
 
-app.secret_key = '1989f15fb5f5df6ae5ffb51a3b5157f2'  # Replace with your generated secret key
+load_dotenv()
+
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
 # Configuration for Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'medhamaisa.usa@gmail.com'  # Replace with your email
-app.config['MAIL_PASSWORD'] = 'wkkz rlnp izay hzdz'  # Replace with your email password
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')  # Replace with your email
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')  # Replace with your email password
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 
