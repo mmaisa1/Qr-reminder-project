@@ -58,9 +58,12 @@ button:hover {
 }
 
 .flash.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background-color: #e6ffed;
+    color: #0f5132;
+    padding: 10px;
+    border-left: 6px solid #198754;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .back-button {

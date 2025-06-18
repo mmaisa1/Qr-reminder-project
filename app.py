@@ -82,6 +82,7 @@ def secret_form():
 
 @app.route('/create-reminder', methods=['POST'])
 def create_reminder():
+    print("⚠️ FORM SUBMISSION RECEIVED!") 
     try:
         username = request.form['username']
         email = request.form['email']
@@ -90,25 +91,21 @@ def create_reminder():
         reminder_date = request.form['reminder_date']
         reminder_time = request.form['reminder_time']
 
-        # Combine date and time into a datetime object
         reminder_datetime = datetime.strptime(f"{reminder_date} {reminder_time}", '%Y-%m-%d %H:%M')
 
-        # Send email at the specified time using a separate thread
+        app.logger.info(f"Received reminder: {username}, {email}, {reminder_datetime}")
+
         threading.Thread(
-            target=send_email, 
+            target=send_email,
             args=(title, description, email, username, title, reminder_datetime)
         ).start()
 
-        flash('Reminder set successfully!', 'success')
-        app.logger.info(f"Reminder set for {username} ({email}) at '{reminder_datetime}'")
-    except ValueError as ve:
-        flash(f'Error: {ve}', 'error')
-        app.logger.error(f'ValueError: {ve}')
-    except Exception as e:
-        flash(f'Error: {e}', 'error')
-        app.logger.error(f'Exception: {e}')
+        # ✅ Instead of redirecting, render a confirmation page
+        return render_template('success.html', username=username)
 
-    return redirect(url_for('secret_form'))
+    except Exception as e:
+        app.logger.error(f"Error: {e}")
+        return f"<h2>Error: {e}</h2>", 500
 
 # Route to generate the QR code
 @app.route('/qr-code')
@@ -151,3 +148,4 @@ def generate_qr():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
