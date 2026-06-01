@@ -49,3 +49,8 @@
 2026-06-01 00:06:08,583 - app - INFO - Rendering secret form page
 2026-06-01 00:06:41,573 - app - INFO - Received reminder: Medha , medhamaisa404@gmail.com, 2026-06-01 00:07:00
 2026-06-01 00:07:01,595 - app - INFO - Email sent to medhamaisa404@gmail.com at '2026-06-01 00:07:00'
+2026-06-01 00:09:09,884 - app - INFO - Rendering QR code page
+2026-06-01 00:09:10,129 - app - INFO - Generated QR code
+2026-06-01 00:09:19,039 - app - INFO - Rendering secret form page
+2026-06-01 00:09:56,236 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-06-01 00:10:00
+2026-06-01 00:10:01,153 - app - INFO - Email sent to medhamaisa404@gmail.com at '2026-06-01 00:10:00'
