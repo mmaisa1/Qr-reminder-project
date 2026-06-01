@@ -1,0 +1,51 @@
+2026-05-31 23:08:22,707 - app - INFO - Rendering QR code page
+2026-05-31 23:08:22,936 - app - INFO - Generated QR code
+2026-05-31 23:15:35,946 - app - INFO - Rendering secret form page
+2026-05-31 23:25:24,361 - app - INFO - Rendering QR code page
+2026-05-31 23:25:24,578 - app - INFO - Generated QR code
+2026-05-31 23:25:35,497 - app - INFO - Rendering secret form page
+2026-05-31 23:29:28,180 - app - INFO - Rendering secret form page
+2026-05-31 23:30:21,757 - app - INFO - Received reminder: medha, medhamaisa404@gmail.com, 2026-05-31 23:32:00
+2026-05-31 23:32:00,688 - app - ERROR - Error sending email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 00721157ae682-7e17ae7c667sm32639017b3.27 - gsmtp')
+2026-05-31 23:34:03,652 - app - INFO - Rendering QR code page
+2026-05-31 23:34:03,862 - app - INFO - Generated QR code
+2026-05-31 23:34:11,748 - app - INFO - Rendering secret form page
+2026-05-31 23:34:23,737 - app - INFO - Rendering secret form page
+2026-05-31 23:35:08,899 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-05-31 23:36:00
+2026-05-31 23:36:00,416 - app - ERROR - Error sending email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 00721157ae682-7e175de02fdsm33119037b3.7 - gsmtp')
+2026-05-31 23:37:12,148 - app - INFO - Rendering secret form page
+2026-05-31 23:37:46,167 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-05-31 23:38:00
+2026-05-31 23:38:00,333 - app - ERROR - Error sending email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 00721157ae682-7e17ae7c57asm32354207b3.29 - gsmtp')
+2026-05-31 23:39:30,447 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-05-31 23:38:00
+2026-05-31 23:39:31,252 - app - ERROR - Error sending email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 00721157ae682-7e17ae7c650sm32439117b3.25 - gsmtp')
+2026-05-31 23:39:32,282 - app - INFO - Rendering secret form page
+2026-05-31 23:40:01,501 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-05-31 23:40:00
+2026-05-31 23:40:02,143 - app - ERROR - Error sending email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 956f58d0204a3-660697440basm2997002d50.7 - gsmtp')
+2026-05-31 23:40:39,217 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-05-31 23:40:00
+2026-05-31 23:40:40,207 - app - ERROR - Error sending email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 00721157ae682-7e175de0308sm32957857b3.1 - gsmtp')
+2026-05-31 23:40:42,952 - app - INFO - Rendering secret form page
+2026-05-31 23:41:21,642 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-05-31 23:42:00
+2026-05-31 23:42:00,829 - app - ERROR - Error sending email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 956f58d0204a3-66069abb92csm2956633d50.18 - gsmtp')
+2026-05-31 23:43:59,261 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-05-31 23:42:00
+2026-05-31 23:44:00,253 - app - ERROR - Error sending email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 00721157ae682-7e17c9b1feasm32624717b3.47 - gsmtp')
+2026-05-31 23:44:00,406 - app - INFO - Rendering secret form page
+2026-05-31 23:45:06,128 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-05-31 23:45:00
+2026-05-31 23:45:06,783 - app - ERROR - Error sending email: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 956f58d0204a3-660699a02a0sm2908156d50.16 - gsmtp')
+2026-05-31 23:48:33,874 - app - INFO - Rendering secret form page
+2026-05-31 23:48:56,955 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-05-31 23:49:00
+2026-05-31 23:49:01,540 - app - INFO - Email sent to medhamaisa404@gmail.com at '2026-05-31 23:49:00'
+2026-05-31 23:50:28,719 - app - INFO - Rendering QR code page
+2026-05-31 23:50:28,925 - app - INFO - Generated QR code
+2026-05-31 23:50:40,764 - app - INFO - Rendering secret form page
+2026-06-01 00:01:14,347 - app - INFO - Rendering QR code page
+2026-06-01 00:01:14,547 - app - INFO - Generated QR code
+2026-06-01 00:01:21,455 - app - INFO - Rendering secret form page
+2026-06-01 00:03:20,308 - app - INFO - Rendering QR code page
+2026-06-01 00:03:20,485 - app - INFO - Generated QR code
+2026-06-01 00:03:41,026 - app - INFO - Rendering secret form page
+2026-06-01 00:04:51,285 - app - INFO - Rendering secret form page
+2026-06-01 00:05:23,242 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-06-01 00:06:00
+2026-06-01 00:06:01,436 - app - INFO - Email sent to medhamaisa404@gmail.com at '2026-06-01 00:06:00'
+2026-06-01 00:06:08,583 - app - INFO - Rendering secret form page
+2026-06-01 00:06:41,573 - app - INFO - Received reminder: Medha , medhamaisa404@gmail.com, 2026-06-01 00:07:00
+2026-06-01 00:07:01,595 - app - INFO - Email sent to medhamaisa404@gmail.com at '2026-06-01 00:07:00'
