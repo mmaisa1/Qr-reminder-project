@@ -54,3 +54,10 @@
 2026-06-01 00:09:19,039 - app - INFO - Rendering secret form page
 2026-06-01 00:09:56,236 - app - INFO - Received reminder: Medha, medhamaisa404@gmail.com, 2026-06-01 00:10:00
 2026-06-01 00:10:01,153 - app - INFO - Email sent to medhamaisa404@gmail.com at '2026-06-01 00:10:00'
+2026-06-01 23:52:21,900 - app - INFO - Rendering QR code page
+2026-06-01 23:52:22,093 - app - INFO - Generated QR code
+2026-06-01 23:52:31,155 - app - INFO - Rendering reminder form
+2026-06-01 23:53:26,572 - app - INFO - Reminder saved for Medha at 2026-06-01 23:54
+2026-06-01 23:53:26,599 - app - ERROR - Error: Could not build url for endpoint 'secret_form'. Did you mean 'create_reminder' instead?
+2026-06-01 23:54:15,457 - app - INFO - Email sent to medhamaisa404@gmail.com for reminder 'Pre-test!'
+2026-06-01 23:54:15,764 - app - INFO - Email sent to medhamaisa404@gmail.com for reminder 'Pre-test!'
