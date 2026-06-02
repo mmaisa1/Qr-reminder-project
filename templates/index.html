@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Create Reminder</h1>
-        <a href="{{ url_for('manage_reminders') }}" class="manage-link">Manage Reminders</a>
+        <a href="{{ url_for('auth.manage_reminders') }}" class="manage-link">Manage Reminders</a>
         
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -23,7 +23,7 @@
         {% endif %}
         {% endwith %}
 
-        <form action="{{ url_for('create_reminder') }}" method="post">
+        <form action="{{ url_for('reminders.create_reminder') }}" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
 
