@@ -9,7 +9,8 @@
 <body>
     <div class="container">
         <h1>Create Reminder</h1>
-
+        <a href="{{ url_for('manage_reminders') }}" class="manage-link">Manage Reminders</a>
+        
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="flash-messages">

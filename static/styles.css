@@ -18,6 +18,19 @@ h1 {
     text-align: center;
 }
 
+.manage-link {
+    display: block;
+    text-align: right;
+    margin-bottom: 15px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.manage-link:hover {
+    text-decoration: underline;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -60,6 +73,19 @@ button {
 
 button:hover {
     background-color: #218838;
+}
+
+.exit-btn {
+    display: block;
+    text-align: right;
+    margin-bottom: 15px;
+    color: #dc3545;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.exit-btn:hover {
+    text-decoration: underline;
 }
 
 .flash-messages {

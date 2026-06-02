@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file, session
 from flask_mail import Mail, Message
 from datetime import datetime
 import qrcode
@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 import os
 import sqlite3
 from apscheduler.schedulers.background import BackgroundScheduler
+import random
+from datetime import timedelta
 
 # Configure logging
 log_handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
@@ -23,6 +25,7 @@ app.logger.setLevel(logging.INFO)
 load_dotenv()
 
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
+app.permanent_session_lifetime = timedelta(minutes=10)
 
 # Mail config
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -102,7 +105,7 @@ Team
             app.logger.info(f"Email sent to {email} for reminder '{title}', repeat: {repeat}")
         except Exception as e:
             app.logger.error(f"Error sending email: {e}")
-            
+
 # --- Scheduler job ---
 def check_reminders():
     with app.app_context():
@@ -193,6 +196,136 @@ def generate_qr():
 
     app.logger.info('Generated QR code')
     return send_file(img_io, mimetype='image/png')
+
+import random
+
+@app.route('/manage-reminders')
+def manage_reminders():
+    return render_template('manage_reminders.html')
+
+@app.route('/send-otp', methods=['POST'])
+def send_otp():
+    email = request.form['email']
+
+    # Check if email has any reminders
+    conn = sqlite3.connect('reminders.db')
+    c = conn.cursor()
+    c.execute('SELECT id FROM reminders WHERE email = ?', (email,))
+    exists = c.fetchone()
+    conn.close()
+
+    if not exists:
+        flash('No reminders found for this email.', 'error')
+        return redirect(url_for('manage_reminders'))
+
+    # Generate OTP
+    otp = str(random.randint(100000, 999999))
+    expires_at = datetime.now().strftime('%Y-%m-%d %H:%M')
+
+    # Save OTP to DB
+    conn = sqlite3.connect('reminders.db')
+    c = conn.cursor()
+    c.execute('''
+        INSERT INTO otp_store (email, otp, expires_at)
+        VALUES (?, ?, ?)
+    ''', (email, otp, expires_at))
+    conn.commit()
+    conn.close()
+
+    # Send OTP email
+    try:
+        msg = Message(
+            'Your OTP for Reminder Access',
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[email]
+        )
+        msg.body = f"Your OTP is: {otp}\n\nIt expires in 10 minutes. Do not share it with anyone."
+        mail.send(msg)
+        app.logger.info(f"OTP sent to {email}")
+    except Exception as e:
+        app.logger.error(f"Error sending OTP: {e}")
+        flash('Error sending OTP. Please try again.', 'error')
+        return redirect(url_for('manage_reminders'))
+
+    return render_template('verify_otp.html', email=email)
+
+@app.route('/verify-otp', methods=['POST'])
+def verify_otp():
+    email = request.form['email']
+    otp_entered = request.form['otp']
+
+    conn = sqlite3.connect('reminders.db')
+    c = conn.cursor()
+    c.execute('''
+        SELECT otp, expires_at FROM otp_store
+        WHERE email = ? AND used = 0
+        ORDER BY id DESC LIMIT 1
+    ''', (email,))
+    row = c.fetchone()
+
+    if not row:
+        conn.close()
+        flash('OTP not found. Please request a new one.', 'error')
+        return redirect(url_for('manage_reminders'))
+
+    otp_actual, expires_at = row
+    expires_dt = datetime.strptime(expires_at, '%Y-%m-%d %H:%M')
+
+    # Check expiry — 10 minutes
+    if (datetime.now() - expires_dt).total_seconds() > 600:
+        conn.close()
+        flash('OTP expired. Please request a new one.', 'error')
+        return redirect(url_for('manage_reminders'))
+
+    if otp_entered != otp_actual:
+        conn.close()
+        flash('Incorrect OTP. Please try again.', 'error')
+        return render_template('verify_otp.html', email=email)
+
+    # Mark OTP as used
+    c.execute('UPDATE otp_store SET used = 1 WHERE email = ? AND used = 0', (email,))
+    conn.commit()
+    conn.close()
+
+    session['verified_email'] = email
+    session.permanent = True
+
+    return redirect(url_for('my_reminders'))
+
+@app.route('/my-reminders')
+def my_reminders():
+    email = session.get('verified_email')
+    if not email:
+        flash('Session expired. Please verify again.', 'error')
+        return redirect(url_for('manage_reminders'))
+
+    conn = sqlite3.connect('reminders.db')
+    c = conn.cursor()
+    c.execute('''
+        SELECT id, username, title, description, reminder_datetime, repeat, sent
+        FROM reminders WHERE email = ?
+        ORDER BY reminder_datetime ASC
+    ''', (email,))
+    reminders = c.fetchall()
+    conn.close()
+
+    return render_template('my_reminders.html', reminders=reminders)
+
+@app.route('/logout')
+def logout():
+    session.pop('verified_email', None)
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('set_reminder'))
+    
+@app.route('/delete-reminder/<int:reminder_id>', methods=['POST'])
+def delete_reminder(reminder_id):
+    conn = sqlite3.connect('reminders.db')
+    c = conn.cursor()
+    c.execute('DELETE FROM reminders WHERE id = ?', (reminder_id,))
+    conn.commit()
+    conn.close()
+    flash('Reminder deleted.', 'success')
+    return redirect(url_for('set_reminder'))
 
 if __name__ == '__main__':
     init_db()
