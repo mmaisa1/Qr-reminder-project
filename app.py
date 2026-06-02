@@ -53,7 +53,7 @@ def init_db():
     conn.close()
 
 # --- Email sender ---
-def send_email(reminder_id, username, title, description, email):
+def send_email(reminder_id, username, title, description, email, repeat='none'):
     with app.app_context():
         try:
             formatted_body = f"""
@@ -70,17 +70,39 @@ Team
             msg.body = formatted_body
             mail.send(msg)
 
-            # Mark as sent in DB
             conn = sqlite3.connect('reminders.db')
             c = conn.cursor()
-            c.execute('UPDATE reminders SET sent = 1 WHERE id = ?', (reminder_id,))
+
+            if repeat == 'none':
+                c.execute('UPDATE reminders SET sent = 1 WHERE id = ?', (reminder_id,))
+            else:
+                from datetime import timedelta
+                conn2 = sqlite3.connect('reminders.db')
+                c2 = conn2.cursor()
+                c2.execute('SELECT reminder_datetime FROM reminders WHERE id = ?', (reminder_id,))
+                row = c2.fetchone()
+                conn2.close()
+
+                current_dt = datetime.strptime(row[0], '%Y-%m-%d %H:%M')
+
+                if repeat == 'daily':
+                    next_dt = current_dt + timedelta(days=1)
+                elif repeat == 'weekly':
+                    next_dt = current_dt + timedelta(weeks=1)
+                elif repeat == 'monthly':
+                    from dateutil.relativedelta import relativedelta
+                    next_dt = current_dt + relativedelta(months=1)
+
+                next_dt_str = next_dt.strftime('%Y-%m-%d %H:%M')
+                c.execute('UPDATE reminders SET reminder_datetime = ? WHERE id = ?', (next_dt_str, reminder_id))
+
             conn.commit()
             conn.close()
 
-            app.logger.info(f"Email sent to {email} for reminder '{title}'")
+            app.logger.info(f"Email sent to {email} for reminder '{title}', repeat: {repeat}")
         except Exception as e:
             app.logger.error(f"Error sending email: {e}")
-
+            
 # --- Scheduler job ---
 def check_reminders():
     with app.app_context():
@@ -88,7 +110,7 @@ def check_reminders():
         conn = sqlite3.connect('reminders.db')
         c = conn.cursor()
         c.execute('''
-            SELECT id, username, title, description, email
+            SELECT id, username, title, description, email, repeat
             FROM reminders
             WHERE sent = 0 AND reminder_datetime <= ?
         ''', (now,))
@@ -96,8 +118,8 @@ def check_reminders():
         conn.close()
 
         for row in due:
-            reminder_id, username, title, description, email = row
-            send_email(reminder_id, username, title, description, email)
+            reminder_id, username, title, description, email, repeat = row
+            send_email(reminder_id, username, title, description, email, repeat)
 
 # --- Routes ---
 @app.route('/')
@@ -121,13 +143,14 @@ def create_reminder():
         reminder_time = request.form['reminder_time']
 
         reminder_datetime = f"{reminder_date} {reminder_time}"
-
+        repeat = request.form.get('repeat', 'none')
+        
         conn = sqlite3.connect('reminders.db')
         c = conn.cursor()
         c.execute('''
-            INSERT INTO reminders (username, email, title, description, reminder_datetime)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (username, email, title, description, reminder_datetime))
+            INSERT INTO reminders (username, email, title, description, reminder_datetime, repeat)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (username, email, title, description, reminder_datetime, repeat))
         conn.commit()
         conn.close()
 

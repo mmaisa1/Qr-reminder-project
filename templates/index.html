@@ -41,6 +41,13 @@
             <label for="reminder_time">Time of Reminder:</label>
             <input type="time" id="reminder_time" name="reminder_time" required>
 
+            <label>Repeat:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="repeat" value="none" checked> One time</label>
+                <label><input type="radio" name="repeat" value="daily"> Daily</label>
+                <label><input type="radio" name="repeat" value="weekly"> Weekly</label>
+                <label><input type="radio" name="repeat" value="monthly"> Monthly</label>
+            </div>
             <button type="submit">Set Reminder</button>
         </form>
 
