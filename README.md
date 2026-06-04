@@ -55,11 +55,12 @@ pip install -r requirements.txt
 ```
 
 Create a `.env` file:
+```
 FLASK_SECRET_KEY=your_secret_key
 MAIL_USERNAME=your_email@gmail.com
 MAIL_PASSWORD=your_gmail_app_password
 URL=http://your_local_ip:5000/set-reminder
-
+```
 Then run:
 
 ```bash
