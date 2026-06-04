@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code for Reminder Form</title>
+    <title>QRemind</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
-    <div style="text-align: center; margin-top: 50px;">
-        <h1>Scan the QR code to access the form</h1>
-        <img src="{{ url_for('qr.generate_qr') }}" alt="QR Code">
+<body class="qr-page">
+    <div class="qr-container">
+        <div class="qr-brand">QRemind</div>
+        <div class="qr-tagline">Scan set and sitback!.</div>
+        <img src="{{ url_for('qr.generate_qr') }}" alt="QR Code" class="qr-image">
+        <div class="qr-instruction">📱 Point your camera at the QR code</div>
     </div>
 </body>
 </html>

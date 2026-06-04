@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Reminders</title>
@@ -9,7 +10,7 @@
 <body>
     <div class="container">
         <h1>My Reminders</h1>
-        <a href="{{ url_for('auth.logout') }}" class="exit-btn">Exit</a>
+        <a href="{{ url_for('auth.logout') }}" class="exit-btn">⊗ Exit</a>
         
         {% if reminders %}
         <div class="reminders-list">
@@ -18,7 +19,7 @@
                 <div class="reminder-header">
                     <span class="reminder-title">{{ r[2] }}</span>
                     <span class="reminder-status {{ 'sent' if r[6] == 1 else 'pending' }}">
-                        {{ 'Sent' if r[6] == 1 else 'Pending' }}
+                        {{ '✓ Sent' if r[6] == 1 else '! Pending' }}
                     </span>
                 </div>
                 <div class="reminder-detail">📝 {{ r[3] }}</div>
