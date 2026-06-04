@@ -9,7 +9,11 @@
 <body>
     <div class="container">
         <h1>Create Reminder</h1>
-        <a href="{{ url_for('auth.manage_reminders') }}" class="manage-link">Manage Reminders</a>
+        {% if session.get('verified_email') %}
+            <a href="{{ url_for('reminders.my_reminders') }}" class="manage-link">My Reminders</a>
+        {% else %}
+            <a href="{{ url_for('auth.manage_reminders') }}" class="manage-link">Manage Reminders</a>
+        {% endif %}
         
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

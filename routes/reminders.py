@@ -65,4 +65,4 @@ def delete_reminder(reminder_id):
     conn.commit()
     conn.close()
     flash('Reminder deleted.', 'success')
-    return redirect(url_for('reminders.set_reminder'))
+    return redirect(url_for('reminders.my_reminders'))

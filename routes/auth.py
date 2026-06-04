@@ -15,16 +15,6 @@ def manage_reminders():
 def send_otp():
     email = request.form['email']
 
-    conn = get_db()
-    c = conn.cursor()
-    c.execute('SELECT id FROM reminders WHERE email = ?', (email,))
-    exists = c.fetchone()
-    conn.close()
-
-    if not exists:
-        flash('No reminders found for this email.', 'error')
-        return redirect(url_for('auth.manage_reminders'))
-
     otp = str(random.randint(100000, 999999))
     expires_at = datetime.now().strftime('%Y-%m-%d %H:%M')
 
