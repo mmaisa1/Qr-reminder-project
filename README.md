@@ -29,6 +29,8 @@ To manage your reminders, you verify with a one-time password sent to your email
 - Jinja2
 
 ## Project structure
+
+```
 QRemind/
 │
 ├── app.py              # app factory, scheduler, db init
@@ -42,6 +44,7 @@ QRemind/
 ├── templates/
 ├── static/
 └── .env                # not committed
+```
 
 ## Running locally
 
