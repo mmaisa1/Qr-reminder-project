@@ -59,7 +59,7 @@ This is a friendly reminder about {title}.
 {description}
 
 Regards,
-Team
+Team QRemind
             """
             msg = Message(title, sender=app.config['MAIL_USERNAME'], recipients=[email])
             msg.body = formatted_body
@@ -119,4 +119,4 @@ if __name__ == '__main__':
     scheduler.add_job(check_reminders, 'interval', minutes=1)
     scheduler.start()
     app = create_app()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)

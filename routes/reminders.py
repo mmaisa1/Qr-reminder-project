@@ -22,6 +22,12 @@ def create_reminder():
 
         reminder_datetime = f"{reminder_date} {reminder_time}"
 
+        reminder_datetime_obj = datetime.strptime(reminder_datetime, '%Y-%m-%d %H:%M')
+
+        if reminder_datetime_obj < datetime.now():
+            flash('Please select a future date and time.', 'error')
+            return redirect(url_for('reminders.set_reminder'))
+            
         conn = get_db()
         c = conn.cursor()
         c.execute('''
