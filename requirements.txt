@@ -2,3 +2,6 @@ Flask
 Flask-Mail
 qrcode[pil]
 python-dotenv
+apscheduler
+python-dateutil
+gunicorn
