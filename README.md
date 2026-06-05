@@ -1,57 +1,73 @@
-# QR Reminder Project
+# QRemind
 
-## Overview
-The QR Reminder Project is a Flask-based web application that allows users to set reminders and receive email notifications. Users can generate a QR code that links to a form for entering reminder details, making it easy to access the form on any device.
+Scan a QR code, set a reminder, get an email when it's time. 
+No account needed — just your email.
+
+Built this project to get hands-on with Flask, databases, and email delivery outside of tutorials.
+
+## How it works
+
+You scan a QR code, fill out a quick form, and QRemind emails you at the time you set. Reminders can repeat daily, weekly, or monthly. No account needed.
+
+To manage your reminders, you verify with a one-time password sent to your email. Kept auth intentionally lightweight — OTP over email felt like the right tradeoff for an app that doesn't need a full user system.
 
 ## Features
-- Generate QR codes that link to a reminder form.
-- Set reminders with a specified date and time.
-- Receive email notifications for reminders.
-- User-friendly interface accessible from any device.
 
-## Requirements
-- Python 3.x
-- Flask
+- Set reminders with a title, description, date and time
+- Repeat options — one time, daily, weekly, monthly
+- Email delivery via Gmail SMTP
+- OTP-based reminder management — view and delete your reminders
+- Session handling with 10 minute expiry
+- QR code generation linking directly to the reminder form
+
+## Tech stack
+
+- Python / Flask
+- SQLite (development — PostgreSQL recommended for production)
 - Flask-Mail
-- qrcode
-- python-dotenv
+- APScheduler
+- Jinja2
 
-## Installation
-1. **Clone the repository:**
-   ```bash
-   git clone git@github.com:mmaisa1/Qr-reminder-project.git
-   cd Qr-reminder-project
-   ```
+## Project structure
 
-2. **Set up a virtual environment (optional but recommended):**
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+```
+QRemind/
+│
+├── app.py              # app factory, scheduler, db init
+├── extensions.py       # mail instance
+├── database.py         # db connection and table setup
+├── migrate.py          # run manually for schema changes
+├── routes/
+│   ├── qr.py           # qr code generation and landing page
+│   ├── reminders.py    # create, view, delete reminders
+│   └── auth.py         # otp flow and session management
+├── templates/
+├── static/
+└── .env                # not committed
+```
 
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Running locally
 
-4. **Create a `.env` file:**
-   ```plaintext
-   FLASK_SECRET_KEY="your_secret_key"
-   MAIL_USERNAME="your_email@gmail.com"
-   MAIL_PASSWORD="your_email_password"
-   URL="http://your_public_ip:5000/secret-form"
-   ```
+```bash
+git clone https://github.com/mmaisa1/Qr-reminder-project.git
+cd Qr-reminder-project
+pip install -r requirements.txt
+```
 
-## Running the Application
-1. **Start the Flask server:**
-   ```bash
-   python3 app.py
-   ```
+Create a `.env` file:
+```
+FLASK_SECRET_KEY=your_secret_key
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_gmail_app_password
+URL=http://your_local_ip:5000/set-reminder
+```
+Then run:
 
-2. **Access the application:**
-   Open your web browser and navigate to `http://your_public_ip:5000/` to access the QR code and reminder form.
+```bash
+python migrate.py
+python app.py
+```
 
-## Usage
-1. Scan the generated QR code with your mobile device.
-2. Fill out the reminder form and submit it.
-3. You will receive an email notification at the specified reminder time.
+## What's next
+
+See `ENHANCEMENTS.md` for planned improvements.
