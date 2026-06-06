@@ -35,6 +35,10 @@ def create_app():
 
     init_db()
 
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(check_reminders, 'interval', minutes=1)
+    scheduler.start()
+
     return app
 
 
@@ -109,9 +113,9 @@ def check_reminders():
 
 
 if __name__ == '__main__':
-    init_db()
+    '''init_db()
     scheduler = BackgroundScheduler()
     scheduler.add_job(check_reminders, 'interval', minutes=1)
-    scheduler.start()
+    scheduler.start()'''
     app = create_app()
     app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
