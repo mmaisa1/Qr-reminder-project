@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 from database import get_db
 from datetime import datetime, timedelta
+import pytz
 
 reminders_bp = Blueprint('reminders', __name__)
 
@@ -19,25 +20,34 @@ def create_reminder():
         reminder_date = request.form['reminder_date']
         reminder_time = request.form['reminder_time']
         repeat = request.form.get('repeat', 'none')
+        timezone_str = request.form.get('timezone', 'UTC')
 
         reminder_datetime = f"{reminder_date} {reminder_time}"
-
         reminder_datetime_obj = datetime.strptime(reminder_datetime, '%Y-%m-%d %H:%M')
 
-        if reminder_datetime_obj < datetime.now() + timedelta(minutes=1):
+        try:
+            user_tz = pytz.timezone(timezone_str)
+        except pytz.UnknownTimeZoneError:
+            user_tz = pytz.UTC
+
+        reminder_datetime_utc = user_tz.localize(reminder_datetime_obj).astimezone(pytz.UTC)
+
+        if reminder_datetime_utc < datetime.now(pytz.UTC) + timedelta(minutes=1):
             flash('Please select a time at least 1 minute from now.', 'error')
             return redirect(url_for('reminders.set_reminder'))
-            
+
+        reminder_datetime_str = reminder_datetime_utc.strftime('%Y-%m-%d %H:%M')
+
         conn = get_db()
         c = conn.cursor()
         c.execute('''
             INSERT INTO reminders (username, email, title, description, reminder_datetime, repeat)
             VALUES (?, ?, ?, ?, ?, ?)
-        ''', (username, email, title, description, reminder_datetime, repeat))
+        ''', (username, email, title, description, reminder_datetime_str, repeat))
         conn.commit()
         conn.close()
 
-        current_app.logger.info(f"Reminder saved for {username} at {reminder_datetime}")
+        current_app.logger.info(f"Reminder saved for {username} at {reminder_datetime_str} UTC")
         return render_template('success.html', username=username)
 
     except Exception as e:

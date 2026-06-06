@@ -46,6 +46,7 @@
 
             <label for="reminder_time">Time of Reminder:</label>
             <input type="time" id="reminder_time" name="reminder_time" required>
+            <input type="hidden" id="timezone" name="timezone" value="">
 
             <label>Repeat:</label>
             <div class="radio-group">
@@ -59,5 +60,8 @@
 
         
     </div>
+    <script>
+        document.getElementById('timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    </script>
 </body>
 </html>

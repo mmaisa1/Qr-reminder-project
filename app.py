@@ -10,6 +10,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 import sqlite3
+import pytz
 
 load_dotenv()
 
@@ -91,7 +92,7 @@ Team
 def check_reminders():
     app = create_app()
     with app.app_context():
-        now = datetime.now().strftime('%Y-%m-%d %H:%M')
+        now = datetime.now(pytz.UTC).strftime('%Y-%m-%d %H:%M')
         conn = sqlite3.connect('reminders.db')
         c = conn.cursor()
         c.execute('''
