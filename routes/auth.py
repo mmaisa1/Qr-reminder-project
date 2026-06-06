@@ -3,7 +3,7 @@ from database import get_db
 from flask_mail import Message
 from datetime import datetime
 import random
-from extensions import send_resend_email
+from extensions import send_brevo_email
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -28,7 +28,7 @@ def send_otp():
     conn.close()
 
     try:
-        send_resend_email(
+        send_brevo_email(
             to=email,
             subject='Your OTP for Reminder Access',
             body=f"Your OTP is: {otp}\n\nIt expires in 10 minutes. Do not share it with anyone."

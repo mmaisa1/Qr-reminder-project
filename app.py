@@ -42,7 +42,7 @@ def send_email(reminder_id, username, title, description, email, repeat='none'):
     app = create_app()
     with app.app_context():
         try:
-            from extensions import send_resend_email
+            from extensions import send_brevo_email
 
             formatted_body = f"""
 Hello {username},
@@ -55,7 +55,7 @@ Regards,
 Team
             """
 
-            send_resend_email(
+            send_brevo_email(
                 to=email,
                 subject=title,
                 body=formatted_body

@@ -5,5 +5,5 @@ python-dotenv
 apscheduler
 python-dateutil
 gunicorn
-resend
+sib-api-v3-sdk
 pytz
