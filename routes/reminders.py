@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 from database import get_db
-from datetime import datetime
+from datetime import datetime, timedelta
 
 reminders_bp = Blueprint('reminders', __name__)
 
@@ -24,8 +24,8 @@ def create_reminder():
 
         reminder_datetime_obj = datetime.strptime(reminder_datetime, '%Y-%m-%d %H:%M')
 
-        if reminder_datetime_obj < datetime.now():
-            flash('Please select a future date and time.', 'error')
+        if reminder_datetime_obj < datetime.now() + timedelta(minutes=1):
+            flash('Please select a time at least 1 minute from now.', 'error')
             return redirect(url_for('reminders.set_reminder'))
             
         conn = get_db()
