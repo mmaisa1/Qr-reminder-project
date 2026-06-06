@@ -1,5 +1,4 @@
 from flask import Flask
-from extensions import mail
 from database import init_db
 from routes.qr import qr_bp
 from routes.reminders import reminders_bp
@@ -17,6 +16,9 @@ load_dotenv()
 def create_app():
     app = Flask(__name__)
 
+    app.secret_key = os.getenv('FLASK_SECRET_KEY')
+    app.permanent_session_lifetime = timedelta(minutes=10)
+
     # Logging
     log_handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
     log_handler.setLevel(logging.INFO)
@@ -25,26 +27,13 @@ def create_app():
     app.logger.addHandler(log_handler)
     app.logger.setLevel(logging.INFO)
 
-    # Config
-    app.secret_key = os.getenv('FLASK_SECRET_KEY')
-    app.permanent_session_lifetime = timedelta(minutes=10)
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-    app.config['MAIL_PORT'] = 587
-    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
-    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
-    app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USE_SSL'] = False
-
-    # Extensions
-    mail.init_app(app)
-
     # Blueprints
     app.register_blueprint(qr_bp)
     app.register_blueprint(reminders_bp)
     app.register_blueprint(auth_bp)
 
     init_db()
-    
+
     return app
 
 
@@ -52,7 +41,8 @@ def send_email(reminder_id, username, title, description, email, repeat='none'):
     app = create_app()
     with app.app_context():
         try:
-            from flask_mail import Message
+            from extensions import send_resend_email
+
             formatted_body = f"""
 Hello {username},
 
@@ -61,11 +51,14 @@ This is a friendly reminder about {title}.
 {description}
 
 Regards,
-Team QRemind
+Team
             """
-            msg = Message(title, sender=app.config['MAIL_USERNAME'], recipients=[email])
-            msg.body = formatted_body
-            mail.send(msg)
+
+            send_resend_email(
+                to=email,
+                subject=title,
+                body=formatted_body
+            )
 
             conn = sqlite3.connect('reminders.db')
             c = conn.cursor()
@@ -94,7 +87,6 @@ Team QRemind
 
         except Exception as e:
             app.logger.error(f"Error sending email: {e}")
-
 
 def check_reminders():
     app = create_app()

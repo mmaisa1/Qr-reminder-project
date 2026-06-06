@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 from database import get_db
-from extensions import mail
 from flask_mail import Message
 from datetime import datetime
 import random
+from extensions import send_resend_email
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -28,13 +28,11 @@ def send_otp():
     conn.close()
 
     try:
-        msg = Message(
-            'Your OTP for Reminder Access',
-            sender=current_app.config['MAIL_USERNAME'],
-            recipients=[email]
+        send_resend_email(
+            to=email,
+            subject='Your OTP for Reminder Access',
+            body=f"Your OTP is: {otp}\n\nIt expires in 10 minutes. Do not share it with anyone."
         )
-        msg.body = f"Your OTP is: {otp}\n\nIt expires in 10 minutes. Do not share it with anyone."
-        mail.send(msg)
         current_app.logger.info(f"OTP sent to {email}")
     except Exception as e:
         current_app.logger.error(f"Error sending OTP: {e}")
