@@ -3,6 +3,8 @@
 Scan a QR code, set a reminder, get an email when it's time. 
 No account needed — just your email.
 
+**Live demo:** https://qremind.onrender.com
+
 Built this project to get hands-on with Flask, databases, and email delivery outside of tutorials.
 
 ## How it works
